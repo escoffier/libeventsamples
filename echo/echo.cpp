@@ -3,6 +3,10 @@
 #include <event2/buffer.h>
 #include <event2/listener.h>
 #include <event2/util.h>
+#include "echo.h"
+#include <iostream>
+#include <string.h>
+#include <errno.h>
 
 void EchoServer::start()
 {
@@ -15,7 +19,7 @@ void EchoServer::start()
     if(base == NULL)
     {
         std::cout<<"Could not initialize libevent"<<std::endl;
-        return -1;
+        return;
     }
     
     memset(&addr, 0 ,sizeof(sockaddr_in));
@@ -26,8 +30,8 @@ void EchoServer::start()
     
     event_base_dispatch(base);  
     
-    evlistener_free(listener);
-    event_base_free();
+    evconnlistener_free(listener);
+    event_base_free(base);
 }
 
 
@@ -65,7 +69,7 @@ void EchoServer::onReadMessage(struct bufferevent * bevent, void* data)
     //struct evbuffer * input = bufferevent_get_input(bevent);
 	char buf[1024];
 	
-	buffer_read(bevent, buf, sizeof(buf));
+	bufferevent_read(bevent, buf, sizeof(buf));
 	
 	std::cout<<"received data: "<<buf<<std::endl;
 }
