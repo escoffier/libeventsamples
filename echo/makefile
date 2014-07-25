@@ -1,6 +1,6 @@
 
 objects = main.o echo.o
-cc = g++
+cc = gcc
 
 httpserver : $(objects)
 	g++ -o echo $(objects) -levent

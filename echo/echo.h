@@ -4,6 +4,7 @@
 #include <event2/buffer.h>
 #include <event2/listener.h>
 #include <event2/util.h>
+#define USE_DEBUG
 
 // RFC 862
 class EchoServer

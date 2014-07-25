@@ -40,6 +40,8 @@ void EchoServer::onConnection( struct evconnlistener* listener, evutil_socket_t 
     struct event_base * base = (struct event_base* ) userdata;
     struct bufferevent * bevent;
     
+    sockaddr_in * sin =(sockaddr_in*) addr;
+    std::cout<<"new connection from : "<<sin->sin_port<<std::endl;
     bevent = bufferevent_socket_new(base, fd, BEV_OPT_CLOSE_ON_FREE);
     if (!bevent) 
 	{
@@ -60,14 +62,14 @@ void EchoServer::onWriteMessage(struct bufferevent * bevent, void* data)
 	struct evbuffer *output = bufferevent_get_output(bevent);
 	if (evbuffer_get_length(output) == 0) {
 		printf("flushed answer\n");
-		bufferevent_free(bevent);
+		//bufferevent_free(bevent);
 	}
 }
 
 void EchoServer::onReadMessage(struct bufferevent * bevent, void* data)
 {
     //struct evbuffer * input = bufferevent_get_input(bevent);
-	char buf[1024];
+	char buf[1024] = {0};
 	
 	bufferevent_read(bevent, buf, sizeof(buf));
 	
